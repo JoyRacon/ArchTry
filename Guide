@@ -1,8 +1,8 @@
-Раздел | Назначение | Файловая система | Размер
-/dev/sda1 | EFI | FAT32 | 512 МБ
-/dev/sda2 | Windows C: | NTFS | 150 ГБ
-/dev/sda3 | Windows D: | NTFS | 550 ГБ
-/dev/sda4 | Arch root / | ext4 | 50 ГБ
-/dev/sda5 | Arch home /home | ext4 | 120 ГБ
-/dev/sda6 | Swap или swapfile | swap | 16-32 ГБ
-/dev/sda7 | Общий раздел | exFAT / NTFS | 100-150 ГБ
+Раздел    | Назначение        | Файловая система | Размер
+/dev/sda1 | EFI               | FAT32            | 512 МБ
+/dev/sda2 | Windows C:        | NTFS             | 150 ГБ
+/dev/sda3 | Windows D:        | NTFS             | 550 ГБ
+/dev/sda4 | Arch root /       | ext4             | 50 ГБ
+/dev/sda5 | Arch home /home   | ext4             | 120 ГБ
+/dev/sda6 | Swap или swapfile | swap             | 16-32 ГБ
+/dev/sda7 | Общий раздел      | exFAT / NTFS     | 100-150 ГБ
