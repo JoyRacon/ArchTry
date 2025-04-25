@@ -1,0 +1,38 @@
+{
+  "version": "1.0",
+  "disk_config": {
+    "type": "manual",
+    "partitions": []
+  },
+  "bootloader": "none",
+  "filesystem": "btrfs",
+  "hostname": "joyracon",
+  "kernel": "linux",
+  "microcode": "intel-ucode",
+  "mirror-region": "Worldwide",
+  "root-password": "changeme",
+  "swap": true,
+  "swap-size": "16G",
+  "locale": "en_US.UTF-8",
+  "timezone": "Europe/Moscow",
+  "keyboard-layout": "us",
+  "keymap": "us",
+  "profile": {
+    "type": "desktop",
+    "desktop": "hyprland"
+  },
+  "additional-packages": [
+    "neofetch", "btop", "nano", "xdg-desktop-portal-hyprland",
+    "xdg-desktop-portal-gtk", "ntfs-3g", "exfatprogs", "networkmanager",
+    "network-manager-applet", "git", "curl", "wget", "pipewire",
+    "pipewire-pulse", "wireplumber", "pavucontrol", "polkit-gnome"
+  ],
+  "users": [
+    {
+      "username": "user",
+      "password": "changeme",
+      "sudo": true,
+      "shell": "/bin/bash"
+    }
+  ]
+}
