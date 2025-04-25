@@ -1,38 +1,60 @@
 {
-  "version": "1.0",
-  "disk_config": {
-    "type": "manual",
-    "partitions": []
+  "// archinstall config": "Ручная конфигурация для dual-boot Arch + Windows",
+  "version": "2.6.1",
+  "language": "ru_RU",               // Язык системы
+  "keyboard_layout": "ru",           // Раскладка клавиатуры
+  "mirror_region": "Worldwide",      // Зеркала пакетов
+  "hard_drive": "/dev/nvme0n1",      // Основной диск
+  "// partitions": "Разметка — EFI, /, /home, swap",
+  "partitions": {
+    "/dev/nvme0n1p1": {
+      "mountpoint": "/boot",         // EFI-раздел
+      "format": true,
+      "filesystem": "fat32"
+    },
+    "/dev/nvme0n1p5": {
+      "mountpoint": "/",             // Корневая система
+      "format": true,
+      "filesystem": "ext4"
+    },
+    "/dev/nvme0n1p6": {
+      "mountpoint": "/home",         // Домашняя директория
+      "format": true,
+      "filesystem": "ext4"
+    },
+    "/dev/nvme0n1p7": {
+      "mountpoint": "swap",          // SWAP
+      "format": true,
+      "filesystem": "swap"
+    }
   },
-  "bootloader": "none",
-  "filesystem": "btrfs",
-  "hostname": "joyracon",
-  "kernel": "linux",
-  "microcode": "intel-ucode",
-  "mirror-region": "Worldwide",
-  "root-password": "changeme",
-  "swap": true,
-  "swap-size": "16G",
-  "locale": "en_US.UTF-8",
-  "timezone": "Europe/Moscow",
-  "keyboard-layout": "us",
-  "keymap": "us",
-  "profile": {
-    "type": "desktop",
-    "desktop": "hyprland"
-  },
-  "additional-packages": [
-    "neofetch", "btop", "nano", "xdg-desktop-portal-hyprland",
-    "xdg-desktop-portal-gtk", "ntfs-3g", "exfatprogs", "networkmanager",
-    "network-manager-applet", "git", "curl", "wget", "pipewire",
-    "pipewire-pulse", "wireplumber", "pavucontrol", "polkit-gnome"
-  ],
+  "bootloader": "None",              // Установка rEFInd вручную после
+  "hostname": "arch-laptop",
+  "root_password": "changeme",       // Заменить!
   "users": [
     {
-      "username": "user",
-      "password": "changeme",
-      "sudo": true,
-      "shell": "/bin/bash"
+      "username": "youruser",        // Заменить!
+      "password": "changeme",        // Заменить!
+      "sudo": true
     }
-  ]
+  ],
+  "profile": {
+    "base": true,
+    "desktop-environment": "none"    // Можно выбрать позже
+  },
+  "kernels": ["linux"],
+  "additional_packages": [
+    "nano",
+    "networkmanager",                // Управление сетью
+    "nvidia",                        // Драйвер GPU
+    "efibootmgr", "dosfstools", "exfatprogs", "git"
+  ],
+  "network_configuration": {
+    "NetworkManager": true
+  },
+  "timezone": "Europe/Moscow",       // Таймзона
+  "ntp": true,
+  "locale": "ru_RU.UTF-8",
+  "kernel_parameters": [],
+  "disk_encryption": false
 }
