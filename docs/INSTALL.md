@@ -92,7 +92,7 @@ lsblk -f $DISK            # убедиться: p1 = vfat EFI (внутри уж
 ```bash
 mkfs.btrfs -L arch $ROOT
 mount $ROOT /mnt
-for sv in @ @home @snapshots @var_log @var_cache; do btrfs subvolume create /mnt/$sv; done
+for sv in @ @home @snapshots @var_log @var_cache @swap; do btrfs subvolume create /mnt/$sv; done
 umount /mnt
 
 OPTS=compress=zstd,noatime
@@ -101,7 +101,11 @@ mount --mkdir -o $OPTS,subvol=@home      $ROOT /mnt/home
 mount --mkdir -o $OPTS,subvol=@snapshots $ROOT /mnt/.snapshots
 mount --mkdir -o $OPTS,subvol=@var_log   $ROOT /mnt/var/log
 mount --mkdir -o $OPTS,subvol=@var_cache $ROOT /mnt/var/cache
+mount --mkdir -o noatime,subvol=@swap  $ROOT /mnt/swap
 mount --mkdir $ESP /mnt/boot
+
+# Своп-файл 20 ГиБ под гибернацию (больше RAM с запасом). Лежит в своём subvolume, чтобы не попадать в снапшоты
+btrfs filesystem mkswapfile --size 20g --uuid clear /mnt/swap/swapfile
 ```
 
 ### 4.2 Базовые пакеты
@@ -111,7 +115,8 @@ pacstrap -K /mnt base linux linux-firmware intel-ucode sof-firmware \
 
 genfstab -U /mnt >> /mnt/etc/fstab
 sed -i 's/,subvolid=[0-9]*//' /mnt/etc/fstab   # монтировать по имени subvolume, а не по id, чтобы работал откат снапшотов
-cat /mnt/etc/fstab                              # проверить: 5 строк btrfs + /boot vfat
+echo '/swap/swapfile  none  swap  defaults,pri=10  0 0' >> /mnt/etc/fstab   # pri ниже, чем у zram: диск используется, только когда zram кончился
+cat /mnt/etc/fstab                              # проверить: 6 строк btrfs + /boot vfat + swap
 ```
 
 ### 4.3 Настройка внутри системы
@@ -130,7 +135,7 @@ printf 'KEYMAP=us\nFONT=ter-132b\n' > /etc/vconsole.conf
 echo matebook > /etc/hostname
 printf '127.0.0.1 localhost\n::1 localhost\n127.0.1.1 matebook\n' > /etc/hosts
 
-# swap в сжатой RAM вместо раздела
+# быстрый своп в сжатой RAM; своп-файл на диске нужен в основном для гибернации
 printf '[zram0]\nzram-size = ram / 2\ncompression-algorithm = zstd\n' > /etc/systemd/zram-generator.conf
 
 mkinitcpio -P
@@ -141,6 +146,11 @@ passwd ИМЯ
 echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/wheel && chmod 440 /etc/sudoers.d/wheel
 
 systemctl enable NetworkManager fstrim.timer systemd-boot-update.service
+
+# Закрыл крышку → сон; через 3 часа сна → гибернация (всё сохраняется на диск, батарея не тратится)
+mkdir -p /etc/systemd/sleep.conf.d /etc/systemd/logind.conf.d
+printf '[Sleep]\nHibernateDelaySec=3h\n' > /etc/systemd/sleep.conf.d/hibernate.conf
+printf '[Login]\nHandleLidSwitch=suspend-then-hibernate\n' > /etc/systemd/logind.conf.d/lid.conf
 ```
 
 ### 4.4 systemd-boot
@@ -155,13 +165,15 @@ editor no
 EOF
 
 ROOT_UUID=$(blkid -s UUID -o value /dev/nvme0n1p2)
+# Где физически лежит своп-файл: ядру это нужно, чтобы при включении найти образ гибернации
+RESUME_OFFSET=$(btrfs inspect-internal map-swapfile -r /swap/swapfile)
 for kind in "" "-fallback"; do
 cat > /boot/loader/entries/arch${kind}.conf <<EOF
 title   Arch Linux${kind}
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux${kind}.img
-options root=UUID=${ROOT_UUID} rootflags=subvol=@ rw
+options root=UUID=${ROOT_UUID} rootflags=subvol=@ rw resume=UUID=${ROOT_UUID} resume_offset=${RESUME_OFFSET}
 EOF
 done
 
@@ -178,6 +190,14 @@ nmcli device wifi connect "ИМЯ_СЕТИ" password "ПАРОЛЬ"
 sudo btrfs subvolume snapshot -r / /.snapshots/000-fresh-install    # точка отката «чистая система»
 ```
 Проверить, что из меню systemd-boot загружается Windows, а из Windows удаётся перезагрузиться обратно в Arch.
+
+### Проверка гибернации
+```bash
+swapon --show            # должны быть /dev/zram0 и /swap/swapfile
+systemctl hibernate      # открыть пару окон/файлов, ноутбук выключится; включить → всё на месте
+```
+Если после включения система загрузилась «с нуля»: сверить `resume_offset` в `/boot/loader/entries/arch.conf`
+с выводом `sudo btrfs inspect-internal map-swapfile -r /swap/swapfile`.
 
 ### Share
 ```bash

@@ -18,6 +18,7 @@
 - WiFi/BT Intel AX201; fingerprint Goodix не работает; часть динамиков может молчать (sof-firmware)
 - SSD TOSHIBA KXG60ZNV1T02 1 ТБ, `/dev/nvme0n1`, GPT, UEFI
 - Экран 3000×2000 — в TTY нужен крупный шрифт (`setfont ter-132b`), в Hyprland scale 2
+- Своп: zram + `/swap/swapfile` 20 ГиБ, закрытая крышка → сон → через 3 ч гибернация
 - Загрузчик: **systemd-boot**, один общий ESP 1 ГиБ смонтирован в `/boot`
 - Arch на BTRFS (zstd, noatime), Share — NTFS через драйвер ядра `ntfs3`, монтируется в `/mnt/share`
 
