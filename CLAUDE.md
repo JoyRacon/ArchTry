@@ -33,4 +33,4 @@
 - Проблемы и их решения → `docs/TROUBLESHOOTING.md`; новые решения → `docs/DECISIONS.md`.
 - Конфиги VPN, ключи, пароли **никогда не коммитить** в этот репозиторий.
 - Код — только на Arch в `~/projects` под git; на Share код не класть (см. правила раскладки в `docs/CONTEXT.md`, раздел 5).
-- Visual Studio и аудио-стек (VST/ASIO) остаются на Windows — Windows должен оставаться рабочим.
+- Аудио-стек (Ableton, FL Studio, Guitar Rig, Focusrite/ASIO) и Office/Visio остаются на Windows — Windows должен оставаться рабочим.
