@@ -73,3 +73,37 @@ Claude доступен только через VPN (Throne / sing-box). До с
 - Имена файлов только допустимые в Windows (без `: * ? " < > |`); опция `windows_names` в fstab не даст создать другие из Linux.
 - Плагины и настройки в `.obsidian` общие для обеих систем — ставятся один раз.
 Отвергнуто: хранилище в `~/` на Arch — из Windows его не видно; Syncthing между двумя ОС на одном ноутбуке — лишняя сложность.
+
+### D10. Раскладка Share и настройки программ под неё
+Всё, с чем работают программы (кроме кода), лежит на Share. Это переживёт переустановку любой из систем и видно из обеих.
+Корень Share — только эти папки, файлы в корень не класть:
+```
+Share (S:\ в Windows, /mnt/share в Arch)
+├── 3d/
+│   ├── blender/<проект>/     .blend + textures/ (пути относительные)
+│   └── print/<модель>/       .stl / .3mf / .gcode для Creality Print
+├── audio/
+│   ├── ableton/<проект> Project/   проект Ableton целиком (Collect All and Save)
+│   ├── fl-studio/<проект>/         .flp + экспорт сэмплов
+│   ├── samples/                    общая библиотека сэмплов для обеих DAW
+│   ├── presets/                    пресеты Guitar Rig и плагинов (копия, см. ниже)
+│   └── renders/                    готовые миксы и стемы
+├── obsidian/<хранилище>/     заметки (D9), история через git
+├── docs/                     документы, PDF, Office-файлы
+├── media/                    фото, видео, скриншоты
+└── tmp/ГГГГ-ММ/              временное, чистить раз в квартал
+```
+Настройки программ:
+- **Blender** (Arch): проекты в `3d/blender/`. Перед сохранением: File → External Data → Make Paths Relative,
+  чтобы текстуры находились с любой системы. Preferences → Save & Load → Save Versions = 2 (страховка `.blend1`, `.blend2`).
+- **Creality Print**: экспорт и gcode в `3d/print/`.
+- **Ableton Live** (Windows): проекты сохранять в `S:\audio\ableton\`; перед закрытием проекта — File → Collect All and Save,
+  тогда все сэмплы копируются в папку проекта и он не «ломается» при переносе.
+- **FL Studio** (Windows): проекты в `S:\audio\fl-studio\`; Options → File settings → Browser extra search folders → добавить `S:\audio\samples`.
+  Для архива проекта целиком — File → Export → Project data files (собирает `.flp` вместе с сэмплами).
+- **Guitar Rig 7** (Windows): пресеты живут в Documents (User Content Native Instruments). Это место оставляем по умолчанию,
+  но после изменений копируем пользовательские пресеты в `S:\audio\presets\guitar-rig\` — так они переживут переустановку Windows.
+- Сами программы и плагины (VST) ставятся на C:, на Share только проекты и сэмплы.
+
+Бэкап: Share не попадает в снапшоты BTRFS. Obsidian защищён git; для `3d/` и `audio/` нужен отдельный бэкап
+(на домашний сервер через WireGuard или на внешний диск) — настроим после установки.
