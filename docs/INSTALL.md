@@ -31,7 +31,18 @@ nvme0n1p3   250 ГиБ  NTFS    Share               → /mnt/share
    - Выполнить ручные шаги из `README.txt` в той же папке: экспорт туннелей WireGuard, ссылки профилей Throne.
 1. Бэкап C: и D: на внешний диск 2 ТБ: образ системы + копия файлов + архив секретов — по `docs/BACKUP.md`. Без проверки бэкапа (BACKUP.md, шаг 5) дальше не идём.
 2. Выписать ключи и лицензии: Windows (обычно в UEFI, переустановка подхватит сама), Ableton, FL Studio, Guitar Rig и остальное.
-3. Флешка Ventoy с двумя образами: Arch ISO (свежий) и Windows 11 ISO.
+3. Флешка Ventoy (от 16 ГБ, **всё на флешке сотрётся**):
+   1. Скачать `ventoy-*-windows.zip` с github.com/ventoy/Ventoy/releases, распаковать, запустить `Ventoy2Disk.exe`.
+   2. Выбрать флешку (проверить букву и размер!) → Install. На флешке появится раздел `Ventoy`.
+   3. Скопировать на него ISO, просто как файлы:
+      - Arch: archlinux.org/download → зеркало (например, mirror.yandex.ru) → `archlinux-<дата>-x86_64.iso`;
+      - Windows 11: microsoft.com/software-download/windows11 → «Скачать образ диска (ISO)» (может понадобиться VPN).
+   4. Проверить контрольные суммы (сравнить с указанными на сайтах):
+      ```powershell
+      Get-FileHash E:\archlinux-*.iso -Algorithm SHA256
+      ```
+   5. Туда же папка `archtry\` с конфигом sing-box (шаг 0c) — в live-Arch флешка подключается, VPN поднимается оттуда.
+      После установки удалить его с флешки: там ключи VPN.
 4. BIOS (F2 при включении): режим UEFI, **Secure Boot → Disabled**. Меню загрузки — F12.
 
 ## 1. Live-USB Arch: проверка железа (ничего не пишем на диск)
