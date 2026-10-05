@@ -40,7 +40,7 @@ Claude открывается только через VPN, а на чистой 
 | `D:\LoreForge`, `D:\command-hub`, `D:\lore-wiki`, `D:\JsNetWebTemplate-main` | мелочь | git-репозитории: проверить, что всё запушено (команда ниже), на Arch склонировать в `~/projects` |
 | Anki (`Roaming\Anki2`) | 0.3 ГБ | синхронизировать с AnkiWeb или забэкапить папку |
 | Telegram | 0.7 ГБ | ничего: всё в облаке |
-| Obsidian | ? | ⏳ найти хранилища командой ниже; бэкапить папку хранилища целиком (вместе со скрытой `.obsidian`) |
+| Obsidian | ? | ⏳ найти хранилища командой ниже; бэкапить папку хранилища целиком (вместе со скрытой `.obsidian`); после переустановки положить на Share в `obsidian\` (D9) |
 | OneDrive | облако | ничего, локально почти пусто |
 
 Проверка git-проектов, что ничего не потеряется (PowerShell):
@@ -96,7 +96,7 @@ Office LTSC + Visio, Huawei PC Manager и HW OSD, Logitech G HUB, NVIDIA App, Ch
 |---|---|---|
 | VS Code + 9 расширений | `visual-studio-code-bin` (AUR) | расширения из `vscode-extensions.txt`; Remote-SSH и Claude Code работают |
 | Git, Python, Pandoc, 7-Zip | `git python pandoc-cli 7zip` | |
-| Obsidian | `obsidian` | хранилища на Share или в git |
+| Obsidian | `obsidian` | хранилище на Share `/mnt/share/obsidian`, общее с Windows (D9) |
 | Telegram | `telegram-desktop` | |
 | Discord | `discord` | |
 | Chrome | `google-chrome` (AUR) | или `chromium`; вход в аккаунт вернёт закладки и расширения |

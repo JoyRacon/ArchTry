@@ -32,5 +32,6 @@
 - Комментарии в конфигах: пользовательские — на русском, технические — на английском.
 - Проблемы и их решения → `docs/TROUBLESHOOTING.md`; новые решения → `docs/DECISIONS.md`.
 - Конфиги VPN, ключи, пароли **никогда не коммитить** в этот репозиторий.
+- Хранилище Obsidian — на Share (`/mnt/share/obsidian`), общее для Windows и Arch (D9).
 - Код — только на Arch в `~/projects` под git; на Share код не класть (см. правила раскладки в `docs/CONTEXT.md`, раздел 5).
 - Аудио-стек (Ableton, FL Studio, Guitar Rig, Focusrite/ASIO) и Office/Visio остаются на Windows — Windows должен оставаться рабочим.
