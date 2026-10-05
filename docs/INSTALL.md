@@ -39,7 +39,7 @@ nvme0n1p3   250 ГиБ  NTFS    Share               → /mnt/share
       - Windows 11: microsoft.com/software-download/windows11 → «Скачать образ диска (ISO)» (может понадобиться VPN).
    4. Проверить контрольные суммы (сравнить с указанными на сайтах):
       ```powershell
-      Get-FileHash E:\archlinux-*.iso -Algorithm SHA256
+      Get-FileHash F:\archlinux-*.iso -Algorithm SHA256   # F: — буква флешки Ventoy
       ```
    5. Туда же папка `archtry\` с конфигом sing-box (шаг 0c) — в live-Arch флешка подключается, VPN поднимается оттуда.
       После установки удалить его с флешки: там ключи VPN.
