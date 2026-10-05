@@ -2,3 +2,6 @@
 ArchTry-inventory-*/
 secrets/
 *.zip
+links.txt
+*.links.txt
+scripts/vpn/config*.json

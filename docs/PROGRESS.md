@@ -8,7 +8,7 @@
 - [x] 0a. Инвентаризация (2026-10-05) — разобрано в `docs/APPS.md`; VMs и WSL не нужны; Obsidian → Share (D9); открыто: пути хранилищ Obsidian, тип рабочего VPN, Dion
 - [ ] 0a+. Проверить git-проекты на D: (команда в APPS.md), разобрать Downloads, ключи Office/Visio
 - [ ] 0b. Сохранить секреты (Throne, WireGuard, Tabby, рабочий VPN, SSH) на внешний диск
-- [ ] 0c. Подготовить и проверить JSON-конфиг sing-box для доступа к Claude из консоли
+- [ ] 0c. VPN для live-среды: `links.txt` из Throne → `links2singbox.py` → `archtry\config.json` + `vpn-live.sh` + sing-box на флешку (инструменты готовы и проверены 2026-10-05)
 - [x] 0d-1. Разбор внешнего диска: удалить ISO CentOS и старый `WindowsImageBackup`, старый файловый бэкап оставить (2026-10-05)
 - [ ] 0d. Бэкап по `docs/BACKUP.md`: проверить старый бэкап на внешнем диске → образ системы → robocopy → секреты в 7z → проверка
 - [ ] 0. Бэкап C: и D:, ключи/лицензии, флешка Ventoy, Secure Boot off

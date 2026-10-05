@@ -17,12 +17,40 @@
 
 ## Доступ к Claude во время установки
 
-Claude открывается только через VPN, а на чистой системе VPN ещё нет. Поэтому:
+Claude открывается только через VPN. Throne работает на ядре sing-box, поэтому те же серверы поднимаются
+в консоли Linux без графики — уже в live-среде, сразу после подключения Wi-Fi.
 
-1. **Live-USB и разметка:** Claude на телефоне (claude.ai/code через VPN на телефоне).
-2. **Первая загрузка Arch, ещё без графики:** поднять `sing-box` из консоли по конфигу из Throne, затем Claude Code CLI.
-   Готовый JSON для sing-box соберём заранее из ссылок профилей и проверим ещё в live-среде (INSTALL.md, шаг 1).
-3. **После Hyprland:** Throne с графическим интерфейсом, как сейчас на Windows.
+### Подготовка на Windows (один раз)
+1. Throne → выделить все профили → ПКМ → Share → Copy link → вставить в `links.txt` (по ссылке на строку;
+   можно и ссылку подписки `https://...`). **Файл секретный** — не в git, не в чат.
+2. Сделать конфиг (Python на Windows уже есть):
+   ```powershell
+   python scripts\vpn\links2singbox.py links.txt -o E:\iso\archtry\config.json
+   ```
+   Поддерживается: vless (tls / reality, tcp / ws / grpc / httpupgrade / h2), trojan, vmess, ss, hysteria2, tuic.
+   Если серверов несколько — sing-box сам выберет самый быстрый (urltest).
+   Не поддерживаются sing-box'ом: транспорт xhttp/splithttp и kcp — такие ссылки конвертер пропустит с пояснением.
+3. В `E:\iso\archtry\` положить `scripts/vpn/vpn-live.sh`. Запасной `sing-box` для Linux туда же скачивает `get-isos.ps1`.
+4. После Ventoy скопировать папку `archtry\` на флешку целиком.
+
+### В live-Arch (после `iwctl ... connect`)
+```bash
+mount --mkdir -o ro /dev/disk/by-label/Ventoy /mnt/usb
+cp -r /mnt/usb/archtry /root/ && umount /mnt/usb
+bash /root/archtry/vpn-live.sh --claude     # VPN + проверка + установка Claude Code
+source /tmp/vpn.env                          # прокси в этой консоли — обязательно
+git clone https://github.com/JoyRacon/ArchTry && cd ArchTry && claude
+```
+Скрипт: ставит sing-box (из репозитория Arch, иначе с флешки), проверяет конфиг, запускает его как локальный прокси
+`127.0.0.1:2080`, проверяет связь с `api.anthropic.com` **через VPN** и пишет страну выхода. Зеркала Arch идут напрямую.
+Вход в Claude: Claude покажет ссылку → открыть на телефоне → код вставить в консоль.
+Если VPN не поднялся — `tail -50 /tmp/sing-box.log`, а Claude пока с телефона.
+
+### Дальше
+- **На установленном Arch без графики:** тот же `vpn-live.sh` (лежит в `/root/archtry`, скопировать в систему до перезагрузки).
+- **Постоянно:** `links2singbox.py --tun` → `/etc/sing-box/config.json` + `systemctl enable --now sing-box` — весь трафик через VPN.
+- **После Hyprland:** Throne с графическим интерфейсом, как сейчас на Windows.
+- После установки удалить `archtry\` с флешки: там ключи VPN.
 
 ## Данные: что бэкапить
 

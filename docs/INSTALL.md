@@ -54,8 +54,14 @@ iwctl station wlan0 connect "ИМЯ_СЕТИ"  # WiFi
 ping -c 3 archlinux.org
 lsblk -f                                # посмотреть текущие разделы
 ```
-Проверить VPN до Claude: запустить `sing-box` с конфигом из Throne и открыть `curl -I https://claude.ai`
-(JSON-конфиг подготовим заранее, см. `docs/APPS.md`). Если не заработало, во время установки пользуемся Claude с телефона.
+VPN и Claude прямо в live-среде (подготовка — `docs/APPS.md`, «Доступ к Claude во время установки»):
+```bash
+mount --mkdir -o ro /dev/disk/by-label/Ventoy /mnt/usb
+cp -r /mnt/usb/archtry /root/ && umount /mnt/usb
+bash /root/archtry/vpn-live.sh --claude
+source /tmp/vpn.env
+```
+Если не заработало — Claude с телефона, лог: `/tmp/sing-box.log`.
 
 Проверить тачпад (курсор в TTY не появится, это нормально, проверяем уже в Hyprland), звук (`speaker-test -c 2`), внешний монитор по USB-C.
 
@@ -206,6 +212,7 @@ done
 
 bootctl list      # должны быть видны Arch Linux, Arch Linux-fallback и Windows Boot Manager
 exit
+cp -r /root/archtry /mnt/root/      # уже вне chroot: VPN-скрипт и конфиг понадобятся после перезагрузки
 umount -R /mnt
 reboot
 ```

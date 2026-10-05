@@ -3,6 +3,7 @@
     - Arch Linux ISO (последний, с зеркала Яндекса) + проверка SHA256
     - Ventoy для Windows (последний релиз с GitHub) + проверка SHA256
     - Windows 11 ISO (официальная ссылка Microsoft через Fido) — нужен VPN
+    - sing-box для Linux (запасной бинарник для VPN в live-Arch) → <Dest>\archtry\sing-box
 
   Запуск (PowerShell, админ не нужен):
     powershell -ExecutionPolicy Bypass -File .\get-isos.ps1
@@ -18,7 +19,8 @@ param(
     [string]$WinLang = 'Russian',     # язык Windows 11
     [switch]$SkipArch,
     [switch]$SkipVentoy,
-    [switch]$SkipWindows
+    [switch]$SkipWindows,
+    [switch]$SkipSingBox
 )
 
 $ErrorActionPreference = 'Stop'
@@ -79,6 +81,22 @@ if (-not $SkipVentoy) {
     }
     Expand-Archive -LiteralPath $zip -DestinationPath (Join-Path $Dest 'ventoy') -Force
     Write-Host "    Ventoy $($rel.tag_name): $(Join-Path $Dest 'ventoy')\...\Ventoy2Disk.exe"
+}
+
+# ---------------------------------------------------------------- sing-box (Linux, for live-Arch VPN)
+if (-not $SkipSingBox) {
+    $irm = @{ Uri = 'https://api.github.com/repos/SagerNet/sing-box/releases/latest' }
+    if ($Proxy) { $irm.Proxy = $Proxy }
+    $rel = Invoke-RestMethod @irm
+    $asset = $rel.assets | Where-Object { $_.name -match '^sing-box-[\d.]+-linux-amd64\.tar\.gz$' } | Select-Object -First 1
+    $tgz = Join-Path $Dest $asset.name
+    Get-File $asset.browser_download_url $tgz
+    $sbDir = Join-Path $Dest 'archtry'
+    New-Item -ItemType Directory -Force -Path $sbDir | Out-Null
+    & tar.exe -xzf $tgz -C $Dest                       # tar is built into Windows 10/11
+    $extracted = Join-Path (Join-Path $Dest ($asset.name -replace '\.tar\.gz$', '')) 'sing-box'
+    Copy-Item -LiteralPath $extracted -Destination (Join-Path $sbDir 'sing-box') -Force
+    Write-Host "    sing-box $($rel.tag_name) for Linux: $sbDir\sing-box"
 }
 
 # ---------------------------------------------------------------- Windows 11
