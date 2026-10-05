@@ -1,0 +1,7 @@
+# Never commit inventory output (VPN configs, SSH keys, Wi-Fi passwords)
+ArchTry-inventory-*/
+secrets/
+*.zip
+links.txt
+*.links.txt
+scripts/vpn/config*.json
