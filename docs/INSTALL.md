@@ -84,7 +84,12 @@ Share не форматируем: это сделает Windows (шаг 3), т�
    reg add "HKLM\System\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /d 1 /t REG_DWORD /f
    ```
 4. «Управление дисками» → раздел 250 ГиБ → Форматировать: NTFS, метка `Share`, назначить букву (например S:).
-5. Проверить, что Windows нормально загружается.
+5. Чтобы C: не забивался (D11):
+   - «Загрузки» → ПКМ → Свойства → Расположение → `S:\downloads` → Переместить;
+   - Параметры → Система → Память → включить Контроль памяти;
+   - LM Studio → My Models → Models Directory → `S:\models`;
+   - Ableton/FL Studio: папки проектов и сэмплов — по D10.
+6. Проверить, что Windows нормально загружается.
 
 ## 4. Установка Arch
 
