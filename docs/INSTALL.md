@@ -21,6 +21,14 @@ nvme0n1p3   250 ГиБ  NTFS    Share               → /mnt/share
 
 ## 0. Подготовка в текущей Windows
 
+1. **Инвентаризация:** скачать `scripts/windows/inventory.ps1` и запустить в PowerShell от администратора:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\inventory.ps1
+   ```
+   Скрипт только читает и копирует; на рабочем столе появится папка `ArchTry-inventory-<дата>`.
+   - `public.zip` (список программ, размеры папок) отправить Claude, разберём по `docs/APPS.md`.
+   - `secrets\` (конфиги Throne, WireGuard, Tabby, VPN, SSH-ключи, Wi-Fi) перенести на внешний диск, лучше в архив 7-Zip с паролем. **Никуда не отправлять и не класть в git.**
+   - Выполнить ручные шаги из `README.txt` в той же папке: экспорт туннелей WireGuard, ссылки профилей Throne.
 1. Бэкап C: и D: на внешний диск или в облако. Отдельно проверить, что бэкап открывается.
 2. Выписать ключи и лицензии: Windows (обычно в UEFI, переустановка подхватит сама), Ableton, FL Studio, Guitar Rig и остальное.
 3. Флешка Ventoy с двумя образами: Arch ISO (свежий) и Windows 11 ISO.
@@ -35,6 +43,9 @@ iwctl station wlan0 connect "ИМЯ_СЕТИ"  # WiFi
 ping -c 3 archlinux.org
 lsblk -f                                # посмотреть текущие разделы
 ```
+Проверить VPN до Claude: запустить `sing-box` с конфигом из Throne и открыть `curl -I https://claude.ai`
+(JSON-конфиг подготовим заранее, см. `docs/APPS.md`). Если не заработало, во время установки пользуемся Claude с телефона.
+
 Проверить тачпад (курсор в TTY не появится, это нормально, проверяем уже в Hyprland), звук (`speaker-test -c 2`), внешний монитор по USB-C.
 
 ## 2. Разметка диска (ДЕСТРУКТИВНО)
